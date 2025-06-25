@@ -1,5 +1,6 @@
 import { Elysia, t } from 'elysia'
 import { getUserPositions, setAlert, addUser } from '../controllers/userController'
+import { Direction } from '../lib/constants'
 
 export const userRoutes = (app: Elysia) =>
     app
@@ -15,6 +16,9 @@ export const userRoutes = (app: Elysia) =>
                         asset: t.String(),
                         liqPrice: t.Number(),
                         address: t.String(),
+                        direction: t.String({
+                            enum: Object.values(Direction),
+                        }),
                     }),
                 })
                 .post('/add-user', addUser, {

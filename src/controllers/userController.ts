@@ -1,5 +1,6 @@
 import prisma from "../lib/prisma";
 import hl from "../lib/hl";
+import type { Direction } from "../lib/constants";
 
 export const getUserPositions = async ({ query }: { query: Record<string, unknown> }) => {
     const positions = await hl.clearinghouseState({
@@ -17,7 +18,7 @@ export const getUserPositions = async ({ query }: { query: Record<string, unknow
         }
     })
 }
-export const setAlert = async ({ body, set }: { body: { asset: string, liqPrice: number, address: string }, set: { status: number } }) => {
+export const setAlert = async ({ body, set }: { body: { asset: string, liqPrice: number, address: string, direction: Direction }, set: { status: number } }) => {
     const user = await prisma.user.findUnique({
         where: {
             address: body.address,
@@ -39,6 +40,7 @@ export const setAlert = async ({ body, set }: { body: { asset: string, liqPrice:
                 },
             },
             acknowledged: false,
+            direction: body.direction,
         }
     })
     return alert
