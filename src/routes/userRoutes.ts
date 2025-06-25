@@ -5,7 +5,10 @@ export const userRoutes = (app: Elysia) =>
     app
         .group('/user', (app) =>
             app
-                .get('/user-positions', getUserPositions)
+                .get('/user-positions', async ({ query }) => {
+
+                    return []
+                })
                 .post('/set-alert', setAlert)
                 .post('/add-user', addUser)
         )
