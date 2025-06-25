@@ -6,6 +6,7 @@ config()
 const envSchema = z.object({
     PORT: z.string().transform(Number),
     DATABASE_URL: z.string(),
+    ENV: z.enum(['development', 'production']).default('development'),
 })
 
 export const env = envSchema.parse(process.env)
