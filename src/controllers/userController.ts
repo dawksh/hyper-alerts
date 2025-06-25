@@ -5,7 +5,6 @@ export const getUserPositions = async ({ query }: { query: Record<string, unknow
     const positions = await hl.clearinghouseState({
         user: query.wallet as `0x${string}`,
     })
-    console.log(positions.assetPositions[0])
     return positions.assetPositions.map(({ position }) => {
         return {
             asset: position.coin,

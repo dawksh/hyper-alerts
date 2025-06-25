@@ -4,7 +4,6 @@ import { fetchPrices } from '../lib/hl'
 
 let lastPrices: Record<string, number> = {}
 
-
 const checkAlerts = async () => {
     const prices = await fetchPrices()
     lastPrices = prices
