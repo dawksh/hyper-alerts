@@ -1,6 +1,5 @@
 import { Elysia, t } from 'elysia'
 import { getUserPositions, setAlert, addUser } from '../controllers/userController'
-import hl from '../lib/hl'
 
 export const userRoutes = (app: Elysia) =>
     app
@@ -18,5 +17,12 @@ export const userRoutes = (app: Elysia) =>
                         address: t.String(),
                     }),
                 })
-                .post('/add-user', addUser)
+                .post('/add-user', addUser, {
+                    body: t.Object({
+                        address: t.String(),
+                        pdId: t.String(),
+                        telegramId: t.String(),
+                        email: t.String(),
+                    }),
+                })
         )

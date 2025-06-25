@@ -16,8 +16,19 @@ export const getUserPositions = async ({ query }: { query: Record<string, unknow
         }
     })
 }
-export const setAlert = async ({ body }: { body: { asset: string, liqPrice: number, address: string } }) => {
-    await prisma.alert.create({
+export const setAlert = async ({ body, set }: { body: { asset: string, liqPrice: number, address: string }, set: { status: number } }) => {
+    const user = await prisma.user.findUnique({
+        where: {
+            address: body.address,
+        },
+    })
+    if (!user) {
+        set.status = 404
+        return {
+            error: "User not found",
+        }
+    }
+    const alert = await prisma.alert.create({
         data: {
             coin: body.asset,
             liq_price: body.liqPrice,
@@ -31,4 +42,14 @@ export const setAlert = async ({ body }: { body: { asset: string, liqPrice: numb
     })
     return alert
 }
-export const addUser = async ({ body }: { body: unknown }) => ({}) 
+export const addUser = async ({ body }: { body: { address: string, pdId: string, telegramId: string, email: string } }) => {
+    const user = await prisma.user.create({
+        data: {
+            address: body.address,
+            pd_id: body.pdId,
+            telegram_id: body.telegramId,
+            email: body.email,
+        },
+    })
+    return user
+}
