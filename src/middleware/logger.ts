@@ -1,13 +1,11 @@
 import { Elysia } from 'elysia'
+import logger from '../lib/logger'
 
-export const logger = (app: Elysia) =>
-    app.onRequest(({ request }) => {
-        console.log(
-            JSON.stringify({
-                time: new Date().toISOString(),
-                method: request.method,
-                url: request.url,
-                headers: Object.fromEntries(request.headers.entries())
-            }, null, 2)
+export const loggerMiddleware = (app: Elysia) =>
+    app.onRequest(async ({ request }) =>
+        logger.info(
+            `📥 ${request.method} ${request.url}` +
+            (request.headers ? `\nHeaders: ${JSON.stringify(Object.fromEntries(request.headers))}` : '') +
+            (request.body ? `\nBody: ${JSON.stringify(await request.clone().json().catch(() => undefined))}` : '')
         )
-    }) 
+    )

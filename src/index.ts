@@ -1,5 +1,6 @@
 import { Elysia } from 'elysia'
-import { logger } from './middleware/logger'
-import { userRoutes } from './routes/userRoutes'
+import { loggerMiddleware } from './middleware/logger'
+import { env } from './lib/env'
+import { routes } from './routes'
 
-userRoutes(logger(new Elysia())).listen(3000) 
+routes(loggerMiddleware(new Elysia())).listen(env.PORT, () => console.log(`listening on ${env.PORT}`))
