@@ -1,4 +1,4 @@
-import logger from "../lib/logger";
+import prisma from "../lib/prisma";
 import hl from "../lib/hl";
 
 export const getUserPositions = async ({ query }: { query: Record<string, unknown> }) => {
@@ -16,5 +16,19 @@ export const getUserPositions = async ({ query }: { query: Record<string, unknow
         }
     })
 }
-export const setAlert = async ({ body }: { body: unknown }) => ({})
+export const setAlert = async ({ body }: { body: { asset: string, liqPrice: number, address: string } }) => {
+    await prisma.alert.create({
+        data: {
+            coin: body.asset,
+            liq_price: body.liqPrice,
+            user: {
+                connect: {
+                    address: body.address,
+                },
+            },
+            acknowledged: false,
+        }
+    })
+    return alert
+}
 export const addUser = async ({ body }: { body: unknown }) => ({}) 

@@ -11,6 +11,12 @@ export const userRoutes = (app: Elysia) =>
                         wallet: t.String(),
                     }),
                 })
-                .post('/set-alert', setAlert)
+                .post('/set-alert', setAlert, {
+                    body: t.Object({
+                        asset: t.String(),
+                        liqPrice: t.Number(),
+                        address: t.String(),
+                    }),
+                })
                 .post('/add-user', addUser)
         )
