@@ -21,11 +21,18 @@ const checkAlerts = async () => {
     nearLiq.forEach(async a => {
         const user = a.user
         if (!user.telegram_id) return
+        const price = prices[a.coin]
+        if (price === undefined) return
+        const percentAway = ((price - a.liq_price) / a.liq_price) * 100
+        const now = new Date().toISOString()
         await prisma.alert.update({
             where: { id: a.id },
             data: { last_alert: new Date() }
         })
-        bot.sendMessage(user.telegram_id, `Alert for ${a.coin} at ${a.liq_price}`)
+        bot.sendMessage(
+            user.telegram_id,
+            `Alert for ${a.coin}\nTime: ${now}\nCurrent: ${price}\nLiq: ${a.liq_price}\n% Away: ${percentAway.toFixed(2)}%`
+        )
     })
 }
 

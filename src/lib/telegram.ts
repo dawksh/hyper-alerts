@@ -4,7 +4,7 @@ import { redis } from "bun";
 import prisma from "./prisma";
 
 const processRegisterCode = (code: string) => code === '' ? 'Invalid code' : `registered: ${code}`;
-const bot = new TelegramBot(env.TELEGRAM_BOT_TOKEN!, { polling: true });
+const bot = new TelegramBot(env.TELEGRAM_BOT_TOKEN!);
 
 bot.onText(/\/register$/, (msg: TelegramBot.Message) => {
     bot.sendMessage(msg.chat.id, "Send Register Code")

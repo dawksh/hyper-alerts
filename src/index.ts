@@ -2,7 +2,7 @@ import { Elysia } from "elysia";
 import { env } from "./lib/env";
 import { routes } from "./routes";
 import logger from "./lib/logger";
-import "./lib/telegram";
+import bot from "./lib/telegram";
 
 const app = new Elysia();
 
@@ -27,5 +27,5 @@ app.onRequest(async ({ request }) => {
     );
 });
 
-
+bot.startPolling();
 app.listen(env.PORT, () => console.log(`listening on ${env.PORT}`));
