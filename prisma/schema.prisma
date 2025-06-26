@@ -17,8 +17,8 @@ datasource db {
 model User {
   id          String   @id @default(uuid())
   address     String   @unique
-  pd_id       String
-  telegram_id String
+  pd_id       String   @unique
+  telegram_id String   @unique @default(uuid())
   email       String
   alerts      Alert[]
   createdAt   DateTime @default(now())

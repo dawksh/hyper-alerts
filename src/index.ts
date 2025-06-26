@@ -2,6 +2,7 @@ import { Elysia } from "elysia";
 import { env } from "./lib/env";
 import { routes } from "./routes";
 import logger from "./lib/logger";
+import "./lib/telegram";
 
 const app = new Elysia();
 
