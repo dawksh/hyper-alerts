@@ -1,6 +1,7 @@
 import prisma from "../lib/prisma";
 import hl from "../lib/hl";
 import type { Direction } from "../lib/constants";
+import logger from "../lib/logger";
 
 export const getUserPositions = async ({ query }: { query: Record<string, unknown> }) => {
     const positions = await hl.clearinghouseState({
@@ -18,10 +19,10 @@ export const getUserPositions = async ({ query }: { query: Record<string, unknow
         }
     })
 }
-export const setAlert = async ({ body, set }: { body: { asset: string, liqPrice: number, address: string, direction: Direction }, set: { status: number } }) => {
+export const setAlert = async ({ body, set }: { body: { alerts: { asset: string, liqPrice: string, address: string, direction: Direction }[] }, set: { status: number } }) => {
     const user = await prisma.user.findUnique({
         where: {
-            address: body.address,
+            address: body?.alerts?.[0]?.address,
         },
     })
     if (!user) {
@@ -30,18 +31,21 @@ export const setAlert = async ({ body, set }: { body: { asset: string, liqPrice:
             error: "User not found",
         }
     }
-    const alert = await prisma.alert.create({
-        data: {
-            coin: body.asset,
-            liq_price: body.liqPrice,
-            user: {
-                connect: {
-                    address: body.address,
-                },
-            },
+    const alert = await prisma.alert.createMany({
+        data: body.alerts.map(({ asset, liqPrice, address, direction }) => ({
+            coin: asset,
+            liq_price: Number(liqPrice),
             acknowledged: false,
-            direction: body.direction,
-        }
+            direction: direction,
+            user_address: address,
+        }))
+    })
+    return alert
+}
+export const acknowledgeAlert = async ({ body }: { body: { alerts: string[] } }) => {
+    const alert = await prisma.alert.updateMany({
+        where: { id: { in: body.alerts } },
+        data: { acknowledged: true, last_alert: new Date() },
     })
     return alert
 }
