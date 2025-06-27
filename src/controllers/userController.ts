@@ -56,3 +56,15 @@ export const addUser = async ({ body }: { body: { address: string, pdId: string,
     })
     return user
 }
+
+export const getAlerts = async ({ query }: { query: Record<string, unknown> }) => {
+    const alerts = await prisma.alert.findMany({
+        where: {
+            user: {
+                address: query.wallet as `0x${string}`,
+            },
+            acknowledged: false,
+        },
+    })
+    return alerts
+}

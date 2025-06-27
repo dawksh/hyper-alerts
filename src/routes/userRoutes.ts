@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia'
-import { getUserPositions, setAlert, addUser } from '../controllers/userController'
+import { getUserPositions, setAlert, addUser, getAlerts } from '../controllers/userController'
 import { Direction } from '../lib/constants'
 
 export const userRoutes = (app: Elysia) =>
@@ -7,6 +7,11 @@ export const userRoutes = (app: Elysia) =>
         .group('/user', (app) =>
             app
                 .get('/user-positions', getUserPositions, {
+                    query: t.Object({
+                        wallet: t.String(),
+                    }),
+                })
+                .get('/alerts', getAlerts, {
                     query: t.Object({
                         wallet: t.String(),
                     }),
