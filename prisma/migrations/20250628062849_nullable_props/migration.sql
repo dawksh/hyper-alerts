@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "pd_id" DROP NOT NULL,
+ALTER COLUMN "telegram_id" DROP NOT NULL,
+ALTER COLUMN "email" DROP NOT NULL;

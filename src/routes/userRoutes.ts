@@ -2,9 +2,10 @@ import { Elysia, t } from "elysia";
 import {
     getUserPositions,
     setAlert,
-    addUser,
     getAlerts,
     acknowledgeAlert,
+    getUser,
+    updateUser,
 } from "../controllers/userController";
 import { Direction } from "../lib/constants";
 
@@ -40,12 +41,18 @@ export const userRoutes = (app: Elysia) =>
                     alerts: t.Array(t.String()),
                 }),
             })
-            .post("/add-user", addUser, {
+            .post("/update-user", updateUser, {
                 body: t.Object({
+                    id: t.String(),
                     address: t.String(),
                     pdId: t.String(),
                     telegramId: t.String(),
                     email: t.String(),
+                }),
+            })
+            .get("/", getUser, {
+                query: t.Object({
+                    wallet: t.String(),
                 }),
             })
     );

@@ -1,7 +1,6 @@
 import prisma from "../lib/prisma";
 import hl from "../lib/hl";
 import type { Direction } from "../lib/constants";
-import logger from "../lib/logger";
 
 export const getUserPositions = async ({ query }: { query: Record<string, unknown> }) => {
     const positions = await hl.clearinghouseState({
@@ -49,8 +48,9 @@ export const acknowledgeAlert = async ({ body }: { body: { alerts: string[] } })
     })
     return alert
 }
-export const addUser = async ({ body }: { body: { address: string, pdId: string, telegramId: string, email: string } }) => {
-    const user = await prisma.user.create({
+export const updateUser = async ({ body }: { body: { id: string, address: string, pdId: string, telegramId: string, email: string } }) => {
+    const user = await prisma.user.update({
+        where: { id: body.id },
         data: {
             address: body.address,
             pd_id: body.pdId,
@@ -71,4 +71,21 @@ export const getAlerts = async ({ query }: { query: Record<string, unknown> }) =
         },
     })
     return alerts
+}
+
+export const getUser = async ({ query }: { query: Record<string, unknown> }) => {
+    const user = await prisma.user.findUnique({
+        where: { address: query.wallet as `0x${string}` },
+    })
+    if (!user) {
+        const newUser = await prisma.user.create({
+            data: {
+                address: query.wallet as `0x${string}`,
+                pd_id: null,
+                email: null,
+            },
+        })
+        return newUser
+    }
+    return user
 }
