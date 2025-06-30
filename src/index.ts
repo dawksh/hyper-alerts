@@ -3,6 +3,7 @@ import { env } from "./lib/env";
 import { routes } from "./routes";
 import logger from "./lib/logger";
 import bot from "./lib/telegram";
+import "./cron";
 
 const app = new Elysia();
 
