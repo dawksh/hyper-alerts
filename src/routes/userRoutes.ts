@@ -48,6 +48,7 @@ export const userRoutes = (app: Elysia) =>
                     pd_id: t.Optional(t.String()),
                     telegram_id: t.Optional(t.String()),
                     email: t.Optional(t.String()),
+                    threshold: t.Optional(t.Number()),
                 }),
             })
             .get("/", getUser, {

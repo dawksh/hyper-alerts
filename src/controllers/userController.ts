@@ -49,7 +49,7 @@ export const acknowledgeAlert = async ({ body }: { body: { alerts: string[] } })
     })
     return alert
 }
-export const updateUser = async ({ body }: { body: { id: string, pd_id?: string, telegram_id?: string, email?: string } }) => {
+export const updateUser = async ({ body }: { body: { id: string, pd_id?: string, telegram_id?: string, email?: string, threshold?: number } }) => {
     logger.info(JSON.stringify(body))
     const user = await prisma.user.update({
         where: { id: body.id },
@@ -57,6 +57,7 @@ export const updateUser = async ({ body }: { body: { id: string, pd_id?: string,
             pd_id: body.pd_id,
             telegram_id: body.telegram_id,
             email: body.email ?? null,
+            threshold: body.threshold,
         },
     })
     return user
