@@ -16,7 +16,7 @@ export const sendMessage = async (
   <Pause length="2"/>
   <Say>${body}</Say>
   <Say>Press 1 to acknowledge this alert.</Say>
-  <Gather numDigits="1" action="https://91a2-103-211-17-141.ngrok-free.app/twilio/handle/${alertId}" timeout="30">
+  <Gather numDigits="1" action="https://hyper-alerts-production.up.railway.app/twilio/handle/${alertId}" timeout="30">
     <Say>Press 1 to acknowledge</Say>
   </Gather>
   <Say>No response received. Goodbye.</Say>
