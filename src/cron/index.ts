@@ -21,7 +21,7 @@ const checkAlerts = async () => {
     const nearLiq = alerts.filter((a) => {
         const price = prices[a.coin];
         if (!price) return false;
-        return Math.abs(price - a.liq_price) / a.liq_price <= 0.2;
+        return Math.abs(price - a.liq_price) / a.liq_price <= a.user.threshold;
     });
     logger.info(`Unacknowledged near-liq alerts: ${nearLiq.length}`);
     nearLiq.forEach(async (a) => {
