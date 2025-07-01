@@ -1,6 +1,7 @@
 import prisma from "../lib/prisma";
 import hl from "../lib/hl";
 import type { Direction } from "../lib/constants";
+import logger from "../lib/logger";
 
 export const getUserPositions = async ({ query }: { query: Record<string, unknown> }) => {
     const positions = await hl.clearinghouseState({
@@ -48,14 +49,14 @@ export const acknowledgeAlert = async ({ body }: { body: { alerts: string[] } })
     })
     return alert
 }
-export const updateUser = async ({ body }: { body: { id: string, address: string, pdId: string, telegramId: string, email: string } }) => {
+export const updateUser = async ({ body }: { body: { id: string, pd_id?: string, telegram_id?: string, email?: string } }) => {
+    logger.info(JSON.stringify(body))
     const user = await prisma.user.update({
         where: { id: body.id },
         data: {
-            address: body.address,
-            pd_id: body.pdId,
-            telegram_id: body.telegramId,
-            email: body.email,
+            pd_id: body.pd_id,
+            telegram_id: body.telegram_id,
+            email: body.email ?? null,
         },
     })
     return user

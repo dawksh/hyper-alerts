@@ -44,10 +44,10 @@ export const userRoutes = (app: Elysia) =>
             .post("/update-user", updateUser, {
                 body: t.Object({
                     id: t.String(),
-                    address: t.String(),
-                    pdId: t.String(),
-                    telegramId: t.String(),
-                    email: t.String(),
+                    address: t.Optional(t.String()),
+                    pd_id: t.Optional(t.String()),
+                    telegram_id: t.Optional(t.String()),
+                    email: t.Optional(t.String()),
                 }),
             })
             .get("/", getUser, {
