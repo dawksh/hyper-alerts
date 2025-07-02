@@ -34,7 +34,7 @@ model Alert {
   acknowledged Boolean
   direction    String   @default("long")
   user         User     @relation(fields: [user_address], references: [address])
-  last_alert   DateTime @default(now())
+  last_alert   DateTime?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }

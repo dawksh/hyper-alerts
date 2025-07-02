@@ -38,6 +38,7 @@ export const setAlert = async ({ body, set }: { body: { alerts: { asset: string,
             acknowledged: false,
             direction: direction,
             user_address: address,
+            last_alert: null,
         }))
     })
     return alert
