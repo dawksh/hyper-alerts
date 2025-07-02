@@ -23,7 +23,7 @@ model User {
   alerts      Alert[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  threshold   Float    @default(0.02)
+  threshold   Float    @default(0.2)
 }
 
 model Alert {
