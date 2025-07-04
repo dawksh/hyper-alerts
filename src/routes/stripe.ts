@@ -23,7 +23,12 @@ export const stripeRoutes = (app: Elysia) =>
             signature || "",
             env.STRIPE_WEBHOOK_SECRET
           );
-          logger.info(event.type);
+          switch(event.type) {
+            case "charge.succeeded":
+              const session = event.data.object
+              console.log(session.metadata.address)
+              break;
+          }
         } catch (error) {
           logger.error(error);
           return {
