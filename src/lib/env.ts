@@ -11,6 +11,8 @@ const envSchema = z.object({
     TWILIO_SID: z.string(),
     TWILIO_AUTH_TOKEN: z.string(),
     TWILIO_PHONE_NUMBER: z.string(),
+    STRIPE_WEBHOOK_SECRET: z.string(),
+    STRIPE_SECRET_KEY: z.string(),
 })
 
 export const env = envSchema.parse(process.env)
