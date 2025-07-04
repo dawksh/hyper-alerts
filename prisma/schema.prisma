@@ -27,6 +27,7 @@ model User {
   subscription_valid_until DateTime?
   stripe_id   String?
   payments    Payment[]
+  credits     Credits[]
 }
 
 model Alert {
@@ -40,6 +41,15 @@ model Alert {
   last_alert   DateTime?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+model Credits {
+  id String @id @default(uuid())
+  user User @relation(fields: [user_id], references: [id])
+  user_id String
+  credits Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Payment {
