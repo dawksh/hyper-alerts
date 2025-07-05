@@ -79,6 +79,10 @@ export const getAlerts = async ({ query }: { query: Record<string, unknown> }) =
 export const getUser = async ({ query }: { query: Record<string, unknown> }) => {
     const user = await prisma.user.findUnique({
         where: { address: query.wallet as `0x${string}` },
+        include: {
+            credits: true,
+            payments: true,
+        }
     })
     if (!user) {
         const newUser = await prisma.user.create({
@@ -87,6 +91,10 @@ export const getUser = async ({ query }: { query: Record<string, unknown> }) => 
                 pd_id: null,
                 email: null,
             },
+            include: {
+                credits: true,
+                payments: true,
+            }
         })
         return newUser
     }
