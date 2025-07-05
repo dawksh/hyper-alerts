@@ -50,14 +50,18 @@ export const stripeRoutes = (app: Elysia) =>
                   receipt_url: session.receipt_url || "",
                 }
               })
-              await prisma.credits.updateMany({
+              await prisma.credits.upsert({
                 where: {
                   user_id: user.id
                 },
-                data: {
+                update: {
                   credits: {
                     increment: amount
-                  }
+                  },
+                },
+                create: {
+                  user_id: user.id,
+                  credits: amount
                 }
               })
               break;
