@@ -61,4 +61,5 @@ model Payment {
   stripe_id  String?
   mode       String
   payment_id String
+  receipt_url String?
 }
