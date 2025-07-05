@@ -16,13 +16,6 @@ const checkAlerts = async () => {
       where: {
         acknowledged: false,
         last_alert: { lt: new Date(Date.now() - COOLDOWN) },
-        user: {
-          credits: {
-            some: {
-              credits: { gt: 0 },
-            },
-          },
-        },
       },
       include: {
         user: {
