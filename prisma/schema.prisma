@@ -15,51 +15,55 @@ datasource db {
 }
 
 model User {
-  id          String   @id @default(uuid())
-  address     String   @unique
-  pd_id       String?  @unique
-  telegram_id String?  @unique @default(uuid())
-  email       String?
-  alerts      Alert[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  threshold   Float    @default(0.2)
+  id                       String    @id @default(uuid())
+  address                  String    @unique
+  pd_id                    String?   @unique
+  telegram_id              String?   @unique @default(uuid())
+  email                    String?
+  alerts                   Alert[]
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @updatedAt
+  threshold                Float     @default(0.2)
   subscription_valid_until DateTime?
-  stripe_id   String?
-  payments    Payment[]
-  credits     Credits[]
+  stripe_id                String?
+  payments                 Payment[]
+  credits                  Credits[]
 }
 
 model Alert {
-  id           String   @id @default(uuid())
+  id           String    @id @default(uuid())
   coin         String
   liq_price    Float
   user_address String
   acknowledged Boolean
-  direction    String   @default("long")
-  user         User     @relation(fields: [user_address], references: [address])
+  size         Float
+  margin       Float
+  last_price   Float
+  leverage     Float
+  direction    String    @default("long")
+  user         User      @relation(fields: [user_address], references: [address])
   last_alert   DateTime?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 }
 
 model Credits {
-  id String @id @default(uuid())
-  user User @relation(fields: [user_id], references: [id])
-  user_id String @unique
-  credits Int @default(0)
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [user_id], references: [id])
+  user_id   String   @unique
+  credits   Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Payment {
-  id         String   @id @default(uuid())
-  user       User     @relation(fields: [user_id], references: [id])
-  user_id    String
-  amount     Float
-  createdAt  DateTime @default(now())
-  stripe_id  String?
-  mode       String
-  payment_id String
+  id          String   @id @default(uuid())
+  user        User     @relation(fields: [user_id], references: [id])
+  user_id     String
+  amount      Float
+  createdAt   DateTime @default(now())
+  stripe_id   String?
+  mode        String
+  payment_id  String
   receipt_url String?
 }

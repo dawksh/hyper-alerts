@@ -29,6 +29,9 @@ export const userRoutes = (app: Elysia) =>
                             asset: t.String(),
                             liqPrice: t.String(),
                             address: t.String(),
+                            size: t.String(),
+                            margin: t.String(),
+                            leverage: t.String(),
                             direction: t.String({
                                 enum: Object.values(Direction),
                             }),

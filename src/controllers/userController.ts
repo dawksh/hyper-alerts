@@ -19,7 +19,7 @@ export const getUserPositions = async ({ query }: { query: Record<string, unknow
         }
     })
 }
-export const setAlert = async ({ body, set }: { body: { alerts: { asset: string, liqPrice: string, address: string, direction: Direction }[] }, set: { status: number } }) => {
+export const setAlert = async ({ body, set }: { body: { alerts: { asset: string, liqPrice: string, address: string, direction: Direction, size: string, margin: string, leverage: string }[] }, set: { status: number } }) => {
     const user = await prisma.user.findUnique({
         where: {
             address: body?.alerts?.[0]?.address,
@@ -32,13 +32,17 @@ export const setAlert = async ({ body, set }: { body: { alerts: { asset: string,
         }
     }
     const alert = await prisma.alert.createMany({
-        data: body.alerts.map(({ asset, liqPrice, address, direction }) => ({
+        data: body.alerts.map(({ asset, liqPrice, address, direction, size, margin, leverage }) => ({
             coin: asset,
             liq_price: Number(liqPrice),
             acknowledged: false,
             direction: direction,
             user_address: address,
             last_alert: null,
+            size: Number(size),
+            margin: Number(margin),
+            last_price: Number(liqPrice),
+            leverage: Number(leverage),
         }))
     })
     return alert
