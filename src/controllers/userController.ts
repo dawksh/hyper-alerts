@@ -41,7 +41,7 @@ export const setAlert = async ({ body, set }: { body: { alerts: { asset: string,
             last_alert: null,
             size: Number(size),
             margin: Number(margin),
-            last_price: Number(liqPrice),
+            last_price: null,
             leverage: Number(leverage),
         }))
     })
@@ -74,7 +74,6 @@ export const getAlerts = async ({ query }: { query: Record<string, unknown> }) =
             user: {
                 address: query.wallet as `0x${string}`,
             },
-            acknowledged: false,
         },
     })
     return alerts

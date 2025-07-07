@@ -38,7 +38,7 @@ model Alert {
   acknowledged Boolean
   size         Float
   margin       Float
-  last_price   Float
+  last_price   Float?
   leverage     Float
   direction    String    @default("long")
   user         User      @relation(fields: [user_address], references: [address])
