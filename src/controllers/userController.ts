@@ -50,7 +50,7 @@ export const setAlert = async ({ body, set }: { body: { alerts: { asset: string,
 export const acknowledgeAlert = async ({ body }: { body: { alerts: string[] } }) => {
     const alert = await prisma.alert.updateMany({
         where: { id: { in: body.alerts } },
-        data: { acknowledged: true, last_alert: new Date() },
+        data: { acknowledged: true },
     })
     return alert
 }
