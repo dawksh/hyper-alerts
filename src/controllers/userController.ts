@@ -2,6 +2,7 @@ import prisma from "../lib/prisma";
 import hl from "../lib/hl";
 import type { Direction } from "../lib/constants";
 import logger from "../lib/logger";
+import stripe from "../lib/stripe";
 
 export const getUserPositions = async ({ query }: { query: Record<string, unknown> }) => {
     const positions = await hl.clearinghouseState({
@@ -55,14 +56,22 @@ export const acknowledgeAlert = async ({ body }: { body: { alerts: string[] } })
     return alert
 }
 export const updateUser = async ({ body }: { body: { id: string, pd_id?: string, telegram_id?: string, email?: string, threshold?: number } }) => {
-    logger.info(JSON.stringify(body))
+    let stripe_id: string | null = null
+
+    if (body.email) {
+        const customer = await stripe.customers.create({
+            email: body.email,
+        })
+        stripe_id = customer.id
+    }
     const user = await prisma.user.update({
         where: { id: body.id },
         data: {
             pd_id: body.pd_id,
             telegram_id: body.telegram_id,
-            email: body.email ?? null,
+            email: body.email,
             threshold: body.threshold,
+            stripe_id: stripe_id,
         },
     })
     return user
