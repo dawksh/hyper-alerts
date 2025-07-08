@@ -15,7 +15,10 @@ const checkAlerts = async () => {
     const alerts = await prisma.alert.findMany({
       where: {
         acknowledged: false,
-        last_alert: { lt: new Date(Date.now() - COOLDOWN) },
+        OR: [
+          { last_alert: { lt: new Date(Date.now() - COOLDOWN) } },
+          { last_alert: null, createdAt: { lt: new Date(Date.now() - COOLDOWN) } },
+        ],
       },
       include: {
         user: {
