@@ -25,6 +25,7 @@ export const stripeRoutes = (app: Elysia) =>
             signature || "",
             env.STRIPE_WEBHOOK_SECRET
           );
+          logger.info(`Event: ${event.type}`)
           switch(event.type) {
             case "charge.succeeded": {
               logger.info("Charge succeeded")
@@ -45,6 +46,7 @@ export const stripeRoutes = (app: Elysia) =>
                 }
               }
               const amount = invoice.amount_paid / 100
+              logger.info(`Amount: ${amount}`)
               await prisma.credits.upsert({
                 where: { user_id: user.id },
                 update: {
