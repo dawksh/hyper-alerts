@@ -66,7 +66,7 @@ export const stripeRoutes = (app: Elysia) =>
               })
               await prisma.user.update({
                 where: { id: user.id },
-                data: { subscription_valid_until: new Date(periodEnd * 1000) }
+                data: { subscription_valid_until: new Date(periodEnd * 1000), subscription_tier: amount.toString() }
               })
               break;
             }
