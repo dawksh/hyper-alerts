@@ -65,6 +65,44 @@ export const stripeRoutes = (app: Elysia) =>
                 }
               })
               break;
+            case "invoice.paid": {
+              const invoice = event.data.object
+              const amount = invoice.amount_paid / 100
+              const user = await prisma.user.findUnique({
+                where: {
+                  stripe_id: invoice.customer as string
+                }
+              })
+              if (!user) {
+                logger.error("User not found")
+                return {
+                  message: "User not found"
+                }
+              } 
+              await prisma.credits.upsert({
+                where: {
+                  user_id: user.id
+                },
+                update: {
+                  credits: {
+                    increment: amount
+                  },
+                },
+                create: {
+                  user_id: user.id,
+                  credits: amount
+                }
+              })
+              await prisma.user.update({
+                where: {
+                  id: user.id
+                },
+                data: {
+                  subscription_valid_until: new Date(invoice.period_end * 1000)
+                }
+              })
+              break;
+            }
           }
         } catch (error) {
           logger.error(error);

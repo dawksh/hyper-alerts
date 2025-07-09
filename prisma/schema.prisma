@@ -25,7 +25,7 @@ model User {
   updatedAt                DateTime  @updatedAt
   threshold                Float     @default(0.2)
   subscription_valid_until DateTime?
-  stripe_id                String?
+  stripe_id                String?   @unique
   payments                 Payment[]
   credits                  Credits[]
 }
