@@ -3,6 +3,7 @@ import hl from "../lib/hl";
 import type { Direction } from "../lib/constants";
 import logger from "../lib/logger";
 import stripe from "../lib/stripe";
+import { createCopperxUser } from "../lib/copperx";
 
 export const getUserPositions = async ({ query }: { query: Record<string, unknown> }) => {
     const positions = await hl.clearinghouseState({
@@ -58,20 +59,37 @@ export const acknowledgeAlert = async ({ body }: { body: { alerts: string[] } })
 export const updateUser = async ({ body }: { body: { id: string, pd_id?: string, telegram_id?: string, email?: string, threshold?: number } }) => {
     let stripe_id: string | null = null
 
+    const user = await prisma.user.findUnique({
+        where: { id: body.id },
+    })
+    if (!user) {
+        return { error: "User not found" }
+    }
+
     if (body.email) {
-        const customer = await stripe.customers.create({
-            email: body.email,
+        const customer = await createCopperxUser(body.email, body.email, {
+            address: user.address,
         })
         stripe_id = customer.id
+        await prisma.user.update({
+            where: { id: body.id },
+            data: {
+                pd_id: body.pd_id,
+                telegram_id: body.telegram_id,
+                email: body.email,
+                threshold: body.threshold,
+                stripe_id: stripe_id,
+            },
+        })
+        return user
     }
-    const user = await prisma.user.update({
+    await prisma.user.update({
         where: { id: body.id },
         data: {
             pd_id: body.pd_id,
             telegram_id: body.telegram_id,
             email: body.email,
             threshold: body.threshold,
-            stripe_id: stripe_id,
         },
     })
     return user
