@@ -41,7 +41,7 @@ export const userRoutes = (app: Elysia) =>
             })
             .post("/acknowledge-alerts", acknowledgeAlert, {
                 body: t.Object({
-                    alerts: t.Array(t.String()),
+                    alert: t.String(),
                 }),
             })
             .post("/update-user", updateUser, {

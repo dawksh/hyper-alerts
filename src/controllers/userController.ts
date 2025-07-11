@@ -49,11 +49,15 @@ export const setAlert = async ({ body, set }: { body: { alerts: { asset: string,
     })
     return alert
 }
-export const acknowledgeAlert = async ({ body }: { body: { alerts: string[] } }) => {
+export const acknowledgeAlert = async ({ body, set }: { body: { alert: string }, set: { status: number } }) => {
     const alert = await prisma.alert.updateMany({
-        where: { id: { in: body.alerts } },
+        where: { id: body.alert },
         data: { acknowledged: true },
     })
+    if (alert.count != 1) {
+        set.status = 400
+        return { error: "not all alerts acknowledged" }
+    }
     return alert
 }
 export const updateUser = async ({ body }: { body: { id: string, pd_id?: string, telegram_id?: string, email?: string, threshold?: number } }) => {
