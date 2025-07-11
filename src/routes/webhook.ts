@@ -6,7 +6,7 @@ export const webhookRoutes = (app: Elysia) =>
   app.group("/webhook", (app) =>
     app
 
-      .post("/copperx", async ({ body, headers, set }) => {
+      .post("/copperx", async ({ body, set }) => {
         const type = body.type;
         switch(type) {
             case "checkout_session.completed": {

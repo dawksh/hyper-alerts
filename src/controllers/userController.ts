@@ -1,18 +1,18 @@
 import prisma from "../lib/prisma";
-import hl from "../lib/hl";
+import hl, { fetchPrices } from "../lib/hl";
 import type { Direction } from "../lib/constants";
-import logger from "../lib/logger";
-import stripe from "../lib/stripe";
 import { createCopperxUser } from "../lib/copperx";
 
 export const getUserPositions = async ({ query }: { query: Record<string, unknown> }) => {
     const positions = await hl.clearinghouseState({
         user: query.wallet as `0x${string}`,
     })
+    const prices = await fetchPrices()
     return positions.assetPositions.map(({ position }) => {
         return {
             asset: position.coin,
             size: position.szi,
+            markPrice: prices[position.coin],
             entryPrice: position.entryPx,
             collateral: position.marginUsed,
             liquidationPrice: position.liquidationPx,
