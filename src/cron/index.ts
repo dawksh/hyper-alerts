@@ -57,6 +57,14 @@ const checkAlerts = async () => {
         );
       }
       if (user.pd_id && user.credits[0]?.credits && user.credits[0]?.credits > 0) {
+        await prisma.alert.update({
+          where: { id: a.id },
+          data: { last_alert: new Date(), last_price: price},
+        });
+        await prisma.credits.update({
+          where: { user_id: user.id },
+          data: { credits: { decrement: 1 } },
+        });
         sendMessage(
           user.pd_id,
           `This call is to remind you that your liquidation price for ${
