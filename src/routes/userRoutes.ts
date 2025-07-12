@@ -19,7 +19,7 @@ export const userRoutes = (app: Elysia) =>
             })
             .get("/alerts", getAlerts, {
                 query: t.Object({
-                    wallet: t.String(),
+                    wallet: t.Optional(t.String()),
                 }),
             })
             .post("/set-alerts", setAlert, {
