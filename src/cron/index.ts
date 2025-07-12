@@ -6,7 +6,7 @@ import { sendMessage } from "../lib/twilio";
 
 let lastPrices: Record<string, number> = {};
 
-const COOLDOWN = 1000 * 60 * 5;
+const COOLDOWN = 1000 * 60 * 10;
 
 const checkAlerts = async () => {
   try {
