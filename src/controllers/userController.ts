@@ -158,9 +158,6 @@ export const getAlerts = async ({
     where: {
         acknowledged: true
     },
-    select: {
-        margin: true,
-    }
   });
   return alerts;
 };
