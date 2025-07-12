@@ -130,6 +130,12 @@ export const getUser = async ({ query }: { query: Record<string, unknown> }) => 
                 payments: true,
             }
         })
+        await prisma.credits.create({
+            data: {
+                user_id: newUser.id,
+                credits: 3,
+            }
+        })
         return newUser
     }
     return user
